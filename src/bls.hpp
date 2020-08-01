@@ -29,7 +29,9 @@
 #include "privatekey.hpp"
 #include "util.hpp"
 
+extern "C" {
 #include "relic.h"
+}
 #include "relic_test.h"
 
 namespace bls {

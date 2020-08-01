@@ -6,7 +6,7 @@ include(FetchContent)
 
 FetchContent_Declare(
   chia-relic
-  GIT_REPOSITORY https://github.com/Chia-Network/relic.git
+  GIT_REPOSITORY https://github.com/relic-toolkit/relic.git
   GIT_TAG        origin/master
 )
 FetchContent_MakeAvailable(chia-relic)
