@@ -200,6 +200,15 @@ void TestVector(string messageHex, string masterSkHex, string sigHex) {
 }
 
 TEST_CASE("Algorand IETF test vectors") {
+    SECTION ("Pyecc vector") {
+        string sig1BasicHex = "96ba34fac33c7f129d602a0bc8a3d43f9abc014eceaab7359146b4b150e57b808645738f35671e9e10e0d862a30cab70074eb5831d13e6a5b162d01eebe687d0164adbd0a864370a7c222a2768d7704da254f1bf1823665bc2361f9dd8c00e99";
+        string sk = "0x0101010101010101010101010101010101010101010101010101010101010101";
+        std::vector<uint8_t> msg = {3, 1, 4, 1, 5, 9};
+        auto skobj = PrivateKey::FromBytes(Util::HexToBytes(sk).data());
+        G2Element sig = BasicSchemeMPL::SignNative(skobj, msg);
+        cout << sig << endl;
+        REQUIRE(sig == G2Element::FromByteVector(Util::HexToBytes(sig1BasicHex)));
+    }
     SECTION ("Test vectors from file") {
         vector<string> filenames = {"../test-vectors/fips_186_3_P256"};
         for (string filename : filenames) {
