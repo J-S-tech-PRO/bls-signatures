@@ -179,6 +179,45 @@ TEST_CASE("EIP-2333 HD keys") {
     }
 }
 
+void TestVector(string messageHex, string masterSkHex, string sigHex) {
+    cout << "testing" << endl;
+    auto message = Util::HexToBytes(messageHex);
+    auto masterSkInt = Util::HexToBytes(masterSkHex);
+    auto sig = Util::HexToBytes(sigHex);
+    cout << "lenmsg: " << message.size() << " len sk: " << masterSkInt.size() << endl;
+    REQUIRE(sig.size() == 96);
+
+    PrivateKey masterSk = PrivateKey::FromSeed(masterSkInt.data(), masterSkInt.size());
+    G2Element sigCalc = AugSchemeMPL::SignNative(masterSk, message);
+    REQUIRE(AugSchemeMPL::Verify(masterSk.GetG1Element(), message, sigCalc));
+    REQUIRE(G2Element::FromByteVector(sig) == sigCalc);
+
+    auto sigCalcSer = sigCalc.Serialize();
+    REQUIRE(sigCalcSer.size() == sig.size());
+    for (int i=0; i < sigCalcSer.size(); i++) {
+        REQUIRE(sigCalcSer[i] == sig[i]);
+    }
+}
+
+TEST_CASE("Algorand IETF test vectors") {
+    SECTION ("Test vectors from file") {
+        vector<string> filenames = {"../test-vectors/fips_186_3_P256"};
+        for (string filename : filenames) {
+            string line;
+            std::ifstream tv(filename);
+            while (getline(tv, line)) {
+                std::stringstream ss(line);
+                string messageHex, keyHex, sigHex;
+                getline(ss, messageHex, ' ');
+                getline(ss, keyHex, ' ');
+                getline(ss, sigHex);
+                TestVector(messageHex, keyHex, sigHex);
+            }
+            tv.close();
+        }
+    }
+}
+
 /*
 TEST_CASE("Test vectors")
 {
