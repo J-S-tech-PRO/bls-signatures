@@ -209,6 +209,7 @@ TEST_CASE("Algorand IETF test vectors") {
         cout << sig << endl;
         REQUIRE(sig == G2Element::FromByteVector(Util::HexToBytes(sig1BasicHex)));
     }
+/*
     SECTION ("Test vectors from file") {
         vector<string> filenames = {"../test-vectors/fips_186_3_P256"};
         for (string filename : filenames) {
@@ -225,6 +226,7 @@ TEST_CASE("Algorand IETF test vectors") {
             tv.close();
         }
     }
+*/
 }
 
 /*
