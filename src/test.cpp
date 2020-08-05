@@ -190,7 +190,7 @@ void TestVector(string messageHex, string masterSkHex, string sigHex) {
     PrivateKey masterSk = PrivateKey::FromSeed(masterSkInt.data(), masterSkInt.size());
     G2Element sigCalc = AugSchemeMPL::SignNative(masterSk, message);
     //REQUIRE(AugSchemeMPL::Verify(masterSk.GetG1Element(), message, sigCalc));
-    cout << "algorand " << (G2Element::FromByteVector(sig) == sigCalc) << endl;
+    cout << "algorand " << sigHex << ": " << (G2Element::FromByteVector(sig) == sigCalc) << endl;
 
     auto sigCalcSer = sigCalc.Serialize();
     //REQUIRE(sigCalcSer.size() == sig.size());
